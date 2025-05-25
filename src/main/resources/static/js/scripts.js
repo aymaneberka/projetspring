@@ -1,29 +1,28 @@
-    $(document).ready(function () {
+$(document).ready(function () {
     $(".btn-delete").on("click", function (e) {
         e.preventDefault();  // Empêche la navigation
 
-        let personId = $(this).attr("data-id");
-        let personFirstname = $(this).attr("data-firstname");
+        let articleId = $(this).attr("data-id");
+        let articledescription = $(this).attr("data-description");
 
-        $("#confirmText").html("Do you want to delete <strong>" + personFirstname + "</strong>?");
-        $("#yesBtn").attr("data-id", personId);  // Stocke l'ID de la personne
+        $("#confirmText").html("Do you want to delete <strong>" + articledescription + "</strong>?");
+        $("#yesBtn").attr("data-id", articleId);  // Stocke l'ID de la personne
         $("#confirmModal").modal("show");  // Affiche la modale
     });
 
     $("#yesBtn").on("click", function () {
-    let personId = $(this).attr("data-id");
+        let articleId = $(this).attr("data-id");
 
-    $.ajax({
-    url: "/persons/delete/" + personId,
-    type: "DELETE",
-    success: function (response) {
-    $("#confirmModal").modal("hide");  // Ferme la modale
-    $("a[data-id='" + personId + "']").closest("tr").fadeOut();  // Supprime la ligne du tableau
-},
-    error: function () {
-    alert("Error deleting person");
-}
+        $.ajax({
+            url: "/articles/delete/" + articleId,
+            type: "DELETE",
+            success: function (response) {
+                $("#confirmModal").modal("hide");  // Ferme la modale
+                $("a[data-id='" + articleId + "']").closest("tr").fadeOut();  // Supprime la ligne du tableau
+            },
+            error: function () {
+                alert("Error deleting person");
+            }
+        });
+    });
 });
-});
-});
-
