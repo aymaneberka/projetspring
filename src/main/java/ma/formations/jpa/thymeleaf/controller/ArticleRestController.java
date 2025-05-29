@@ -17,4 +17,5 @@ public class ArticleRestController {
         articleService.deleteById(id);
         return ResponseEntity.ok("Article deleted successfully");
     }
+
 }

@@ -1,28 +1,31 @@
-$(document).ready(function () {
-    $(".btn-delete").on("click", function (e) {
-        e.preventDefault();  // Empêche la navigation
+// Affiche la modale de confirmation
+$(document).on("click", ".btn-delete", function (e) {
+    e.preventDefault();
 
-        let articleId = $(this).attr("data-id");
-        let articledescription = $(this).attr("data-description");
+    const articleId = $(this).data("id");
+    const articleDescription = $(this).data("description");
 
-        $("#confirmText").html("Do you want to delete <strong>" + articledescription + "</strong>?");
-        $("#yesBtn").attr("data-id", articleId);  // Stocke l'ID de la personne
-        $("#confirmModal").modal("show");  // Affiche la modale
-    });
+    $("#confirmText").html("Voulez-vous supprimer <strong>" + articleDescription + "</strong> ?");
+    $("#yesBtn").data("id", articleId);
 
-    $("#yesBtn").on("click", function () {
-        let articleId = $(this).attr("data-id");
+    const confirmModal = new bootstrap.Modal(document.getElementById("confirmModal"));
+    confirmModal.show();
+});
 
-        $.ajax({
-            url: "/articles/delete/" + articleId,
-            type: "DELETE",
-            success: function (response) {
-                $("#confirmModal").modal("hide");  // Ferme la modale
-                $("a[data-id='" + articleId + "']").closest("tr").fadeOut();  // Supprime la ligne du tableau
-            },
-            error: function () {
-                alert("Error deleting person");
-            }
-        });
+// Envoie la requête DELETE
+$("#yesBtn").on("click", function () {
+    const articleId = $(this).data("id");
+    const confirmModal = bootstrap.Modal.getInstance(document.getElementById("confirmModal"));
+
+    $.ajax({
+        url: "/articles/delete/" + articleId,
+        type: "DELETE",
+        success: function () {
+            confirmModal.hide();
+            $("button[data-id='" + articleId + "']").closest("tr").fadeOut();
+        },
+        error: function () {
+            alert("Erreur lors de la suppression.");
+        }
     });
 });
